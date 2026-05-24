@@ -1,3 +1,3 @@
 package main
 
-const _ResubmitMinutes = 5
+const _ResubmitSeconds = 90

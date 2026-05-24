@@ -114,7 +114,7 @@ func main() {
 	submitLimiter := limiter.New(
 		limiter.Config{
 			Max:        1,                              // Allow exactly 1 request...
-			Expiration: _ResubmitMinutes * time.Minute, // ...per 1 minute window
+			Expiration: _ResubmitSeconds * time.Second, // window
 			KeyGenerator: func(c fiber.Ctx) string {
 				return c.IP() // Track users by their IP address
 			},
@@ -123,7 +123,7 @@ func main() {
 					fiber.Map{
 						"error": fmt.Sprintf(
 							"Submission locked. Please wait %d minute(s) before trying again.",
-							_ResubmitMinutes,
+							_ResubmitSeconds,
 						),
 					},
 				)
