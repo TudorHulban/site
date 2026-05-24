@@ -1,8 +1,10 @@
 package main
 
 import (
+	"embed"
 	"fmt"
 	"io"
+	"io/fs"
 	"log"
 	"os"
 
@@ -10,15 +12,39 @@ import (
 	"github.com/gofiber/fiber/v3/middleware/static"
 )
 
+//go:embed public/*
+var embeddedFS embed.FS
+
 func main() {
 	app := fiber.New()
 
-	app.Get(
+	publicFS, errSubtree := fs.Sub(embeddedFS, "public")
+	if errSubtree != nil {
+		log.Fatal("Failed to create sub FS:", errSubtree)
+	}
+
+	app.Use(
 		"/*",
-		static.New("./public"),
+		static.New(
+			"",
+			static.Config{
+				FS: publicFS,
+			},
+		),
 	)
 
-	var logWriter io.Writer = os.Stdout
+	// Replace `var logWriter io.Writer = os.Stdout` with:
+	file, errCreateFile := os.OpenFile(
+		"consults.log",
+		os.O_APPEND|os.O_CREATE|os.O_WRONLY,
+		0644,
+	)
+	if errCreateFile != nil {
+		log.Fatal("Failed to open log file:", errCreateFile)
+	}
+	defer file.Close()
+
+	mw := io.MultiWriter(os.Stdout, file)
 
 	app.Post(
 		"/submit-consult",
@@ -35,7 +61,7 @@ func main() {
 			)
 
 			// 3. Write directly to the io.Writer
-			_, errWrite := io.WriteString(logWriter, payload)
+			_, errWrite := io.WriteString(mw, payload)
 			if errWrite != nil {
 				log.Printf(
 					"Failed to write consultation data to writer: %v",
@@ -55,5 +81,12 @@ func main() {
 		},
 	)
 
-	log.Fatal(app.Listen(":3000"))
+	log.Fatal(
+		app.Listen(
+			":3000",
+			fiber.ListenConfig{
+				EnablePrefork: true,
+			},
+		),
+	)
 }

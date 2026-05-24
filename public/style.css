@@ -124,6 +124,21 @@ body {
 .btn-outline { border-color: var(--border); color: var(--text-primary); }
 .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
 
+/* Button state handling */
+.btn-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary.submitted {
+  background-color: #10b981; /* Emerald success tone */
+  border-color: #059669;
+  color: #ffffff;
+  cursor: default;
+  pointer-events: none;
+}
+
 /* Sections */
 section { padding: var(--spacing-lg) 0; }
 

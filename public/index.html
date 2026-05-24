@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Tara Works: High-Performance Go Systems Engineering & Architecture. Low-latency, concurrent infrastructure that scales predictably.">
+  <meta name="description"
+    content="Tara Works: High-Performance Go Systems Engineering & Architecture. Low-latency, concurrent infrastructure that scales predictably.">
   <title>Tara Works | High-Performance Systems Engineering</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <header class="site-header">
     <div class="container">
@@ -23,7 +26,8 @@
     <section class="hero">
       <div class="container">
         <h1>High-Performance Go Systems</h1>
-        <p class="hero-sub">We design concurrent, low-latency infrastructure that scales predictably. Stop fighting goroutine leaks, unpredictable garbage collection sweeps, and poorly decoupled microservices.</p>
+        <p class="hero-sub">We design concurrent, low-latency infrastructure that scales predictably. Stop fighting
+          goroutine leaks, unpredictable garbage collection sweeps, and poorly decoupled microservices.</p>
         <div class="hero-tags">
           <span>Distributed Systems</span>
           <span>Core Network Microservices</span>
@@ -43,15 +47,18 @@
         <div class="grid-3">
           <div class="card">
             <h3>Concurrency Design</h3>
-            <p>Production-ready pipelines utilizing Go's native channel primitives and synchronization barriers. Fully deterministic execution boundaries with zero data races.</p>
+            <p>Production-ready pipelines utilizing Go's native channel primitives and synchronization barriers. Fully
+              deterministic execution boundaries with zero data races.</p>
           </div>
           <div class="card">
             <h3>Performance Profiling</h3>
-            <p>In-depth runtime tracking using pprof and trace analysis. Eliminating hidden heap allocations, fine-tuning memory footprints, and smoothing p99 latency spikes.</p>
+            <p>In-depth runtime tracking using pprof and trace analysis. Eliminating hidden heap allocations,
+              fine-tuning memory footprints, and smoothing p99 latency spikes.</p>
           </div>
           <div class="card">
             <h3>Distributed Infrastructure</h3>
-            <p>Highly resilient, containerized services interacting via lightning-fast gRPC streams. Clean API layouts separating networking concerns from pure domain logic.</p>
+            <p>Highly resilient, containerized services interacting via lightning-fast gRPC streams. Clean API layouts
+              separating networking concerns from pure domain logic.</p>
           </div>
         </div>
       </div>
@@ -67,16 +74,23 @@
             <h3>High-Throughput Memory Virtualization for Stateful Edge Environments</h3>
             <div class="case-content">
               <h4>The Challenge</h4>
-              <p>High-frequency telemetry platforms and multi-agent simulation runtimes struggle with unpredictable p99 latency spikes caused by heap fragmentation and sequential runtime GC sweeps.</p>
+              <p>High-frequency telemetry platforms and multi-agent simulation runtimes struggle with unpredictable p99
+                latency spikes caused by heap fragmentation and sequential runtime GC sweeps.</p>
               <h4>The Strategy</h4>
-              <p>Engineered a low-level data layer utilizing lock-free, double-buffered byte arena mechanics. Flat, pre-allocated memory pool governed strictly by atomic region operations.</p>
+              <p>Engineered a low-level data layer utilizing lock-free, double-buffered byte arena mechanics. Flat,
+                pre-allocated memory pool governed strictly by atomic region operations.</p>
               <h4>Architectural Impact</h4>
               <ul>
-                <li><strong>Zero Heap-Allocation in Hot Loops:</strong> Eradicated transient memory footprints, forcing the Go compiler to avoid escape analysis to the heap.</li>
-                <li><strong>Lock-Free Pipeline Synchronization:</strong> Enabled continuous data ingestion and read-state processing on separate memory planes, eliminating mutex contention.</li>
-                <li><strong>Predictable Real-Time Telemetry:</strong> Stabilized pipelines against network faults, avoiding goroutine leaks with stalled consumers.</li>
+                <li><strong>Zero Heap-Allocation in Hot Loops:</strong> Eradicated transient memory footprints, forcing
+                  the Go compiler to avoid escape analysis to the heap.</li>
+                <li><strong>Lock-Free Pipeline Synchronization:</strong> Enabled continuous data ingestion and
+                  read-state processing on separate memory planes, eliminating mutex contention.</li>
+                <li><strong>Predictable Real-Time Telemetry:</strong> Stabilized pipelines against network faults,
+                  avoiding goroutine leaks with stalled consumers.</li>
               </ul>
-              <p class="bottom-line"><strong>Bottom Line:</strong> Converted unpredictable memory behavior into a bounded, deterministic infrastructure system designed to maintain single-digit millisecond latency under saturation.</p>
+              <p class="bottom-line"><strong>Bottom Line:</strong> Converted unpredictable memory behavior into a
+                bounded, deterministic infrastructure system designed to maintain single-digit millisecond latency under
+                saturation.</p>
             </div>
           </article>
 
@@ -86,17 +100,24 @@
             <h3>Unified Streaming Viewport via Dedicated WebSockets (hx-ws)</h3>
             <div class="case-content">
               <h4>The Problem</h4>
-              <p>Traditional SPAs break under heavy real-time loads due to state synchronization nightmares, massive HTTP overhead (~500B–2KB per request), and JavaScript bloat choking rendering pipelines.</p>
+              <p>Traditional SPAs break under heavy real-time loads due to state synchronization nightmares, massive
+                HTTP overhead (~500B–2KB per request), and JavaScript bloat choking rendering pipelines.</p>
               <h4>The Solution</h4>
-              <p>Collapsed the client-server boundary by migrating the semantic state machine to the backend. Streams lightweight HTML fragments over persistent, bi-directional WebSocket pipes.</p>
+              <p>Collapsed the client-server boundary by migrating the semantic state machine to the backend. Streams
+                lightweight HTML fragments over persistent, bi-directional WebSocket pipes.</p>
               <h4>Key Operational Problems Solved</h4>
               <ul>
                 <li><strong>Near-Zero Protocol Overhead:</strong> Metadata framing drops to 2–14 bytes per message.</li>
-                <li><strong>Elimination of Frontend Tech Debt:</strong> No client-side routers, state managers, or translation layers required.</li>
-                <li><strong>Instant Out-of-Band (OOB) Updates:</strong> Asynchronous server pushes mutate UI components instantly.</li>
-                <li><strong>Extreme Resource Efficiency:</strong> Long-lived connections consume ~2KB per idle client. Tens of thousands of simultaneous users per modest server.</li>
+                <li><strong>Elimination of Frontend Tech Debt:</strong> No client-side routers, state managers, or
+                  translation layers required.</li>
+                <li><strong>Instant Out-of-Band (OOB) Updates:</strong> Asynchronous server pushes mutate UI components
+                  instantly.</li>
+                <li><strong>Extreme Resource Efficiency:</strong> Long-lived connections consume ~2KB per idle client.
+                  Tens of thousands of simultaneous users per modest server.</li>
               </ul>
-              <p class="bottom-line"><strong>Executive Bottom Line:</strong> "We deliver native-feeling systems software running effortlessly inside a standard web viewport. By cutting out the JavaScript middleman, we slash time-to-market and eliminate client-side state bugs."</p>
+              <p class="bottom-line"><strong>Executive Bottom Line:</strong> "We deliver native-feeling systems software
+                running effortlessly inside a standard web viewport. By cutting out the JavaScript middleman, we slash
+                time-to-market and eliminate client-side state bugs."</p>
             </div>
           </article>
         </div>
@@ -113,7 +134,8 @@
           </div>
           <div class="form-group">
             <label for="objective">Architectural Bottleneck / Infrastructure Objective</label>
-            <textarea id="objective" name="objective" rows="4" placeholder="We are fighting performance degradation on our stateful gRPC processing layer under high concurrent loads..."></textarea>
+            <textarea id="objective" name="objective" rows="4"
+              placeholder="We are fighting performance degradation on our stateful gRPC processing layer under high concurrent loads..."></textarea>
           </div>
           <button type="submit" class="btn btn-primary">Submit Architectural Brief</button>
         </form>
@@ -124,10 +146,46 @@
   <footer class="site-footer">
     <div class="container">
       <div class="tech-stack">
-        <span>GO</span><span>GITHUB CI-CD</span><span>DOCKER</span><span>KUBERNETES</span><span>GRPC</span><span>PROTOBUF</span><span>POSTGRESQL</span><span>LINUX</span>
+        <span>GO</span><span>GITHUB
+          CI-CD</span><span>DOCKER</span><span>KUBERNETES</span><span>GRPC</span><span>PROTOBUF</span><span>POSTGRESQL</span><span>LINUX</span>
       </div>
       <p class="copyright">&copy; 2026 Tara Works Systems Engineering and Architecture. All rights reserved.</p>
     </div>
   </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.querySelector('.consult-form');
+      const btn = form.querySelector('button[type="submit"]');
+      const originalText = btn.textContent;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        btn.disabled = true;
+        btn.textContent = 'Submitting...';
+
+        try {
+          const response = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form)
+          });
+
+          if (response.ok) {
+            btn.textContent = 'Submitted';
+            btn.classList.add('submitted');
+            form.reset(); // Clear fields for security
+          } else {
+            throw new Error(`HTTP ${response.status}`);
+          }
+        } catch (err) {
+          console.error('Submission failed:', err);
+          btn.textContent = 'Failed. Retry?';
+          btn.disabled = false;
+        }
+      });
+    });
+  </script>
 </body>
+
 </html>
