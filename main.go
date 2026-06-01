@@ -13,14 +13,15 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v3"
+	fiberlog "github.com/gofiber/fiber/v3/log"
 	"github.com/gofiber/fiber/v3/middleware/limiter"
+	"github.com/gofiber/fiber/v3/middleware/logger"
 	"github.com/gofiber/fiber/v3/middleware/static"
+
 	"github.com/tudorhulban/arenalog"
+	arenafiber "github.com/tudorhulban/arenalog/arena-fiber"
 	"github.com/tudorhulban/bytearena"
 	"github.com/tudorhulban/bytearena/helpers"
-
-	fiberlog "github.com/gofiber/fiber/v3/log"
-	"github.com/gofiber/fiber/v3/middleware/logger"
 )
 
 //go:embed public/*
@@ -94,9 +95,11 @@ func main() {
 		)
 	}
 
-	fiberLogger := FiberLogger{
+	fiberLogger := arenafiber.ALogger{
 		L: l,
 	}
+
+	fiberlog.SetLogger(&fiberLogger)
 
 	app := fiber.New()
 
@@ -157,8 +160,6 @@ func main() {
 		},
 	)
 
-	fiberlog.SetLogger(&fiberLogger)
-
 	app.Post(
 		"/submit-consult",
 		submitLimiter,
@@ -199,7 +200,7 @@ func main() {
 		app.Listen(
 			":80",
 			fiber.ListenConfig{
-				EnablePrefork: true,
+				// EnablePrefork: true,
 			},
 		),
 	)
