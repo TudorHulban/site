@@ -1,11 +1,13 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"fmt"
 	"io"
 	"io/fs"
 	"log"
+	"runtime"
 	"time"
 
 	"os"
@@ -13,6 +15,12 @@ import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/limiter"
 	"github.com/gofiber/fiber/v3/middleware/static"
+	"github.com/tudorhulban/arenalog"
+	"github.com/tudorhulban/bytearena"
+	"github.com/tudorhulban/bytearena/helpers"
+
+	fiberlog "github.com/gofiber/fiber/v3/log"
+	"github.com/gofiber/fiber/v3/middleware/logger"
 )
 
 //go:embed public/*
@@ -32,11 +40,69 @@ func main() {
 	}
 	defer file.Close()
 
+	ingestor, errCrIngestor := bytearena.NewIngestor(
+		bytearena.Size100K(),
+		os.Stdout,
+
+		helpers.TernaryWithValueIn(
+			[]int{1},
+			runtime.NumCPU(),
+			nil,
+			bytearena.WithCounterCoreCPU(),
+		),
+	)
+	if errCrIngestor != nil {
+		log.Fatal(
+			"Failed to create ingestor:",
+			errCrIngestor,
+		)
+	}
+	if ingestor == nil {
+		log.Fatal(
+			"Create ingestor is nil.",
+		)
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	chIngestionEnd := ingestor.StartIngestion(ctx)
+
+	defer func() {
+		cancel()
+		<-chIngestionEnd
+	}()
+
+	l, errCrLogger := arenalog.NewLogger(
+		&arenalog.ParamsNewLogger{
+			Ingestor:    ingestor,
+			LoggerLevel: arenalog.LevelInfo,
+
+			WithFatalWriter: os.Stdout,
+			WithJSON:        true,
+		},
+
+		arenalog.WithTimestampRFC3339UTC(ctx),
+	)
+	if errCrLogger != nil {
+		log.Fatal(
+			"Failed to create logger:",
+			errCrLogger,
+		)
+	}
+	if l == nil {
+		log.Fatal(
+			"Create logger is nil.",
+		)
+	}
+
+	fiberLogger := FiberLogger{
+		L: l,
+	}
+
 	app := fiber.New()
 
 	publicFS, errSubtree := fs.Sub(embeddedFS, "public")
 	if errSubtree != nil {
-		log.Fatal(
+		l.Fatal(
 			"Failed to create sub FS:",
 			errSubtree,
 		)
@@ -48,6 +114,25 @@ func main() {
 			"",
 			static.Config{
 				FS: publicFS,
+			},
+		),
+	)
+
+	app.Use(
+		logger.New(
+			logger.Config{
+				LoggerFunc: func(c fiber.Ctx, data *logger.Data, cfg *logger.Config) error {
+					fiberLogger.L.Info(
+						fmt.Sprintf("%s %s %d %s",
+							c.Method(),                // GET / POST etc
+							c.OriginalURL(),           // full path with query
+							data.Stop.Sub(data.Start), // latency
+							c.IP(),                    // client IP
+						),
+					)
+
+					return nil
+				},
 			},
 		),
 	)
@@ -71,6 +156,8 @@ func main() {
 			},
 		},
 	)
+
+	fiberlog.SetLogger(&fiberLogger)
 
 	app.Post(
 		"/submit-consult",
@@ -108,7 +195,7 @@ func main() {
 		},
 	)
 
-	log.Fatal(
+	l.Fatal(
 		app.Listen(
 			":80",
 			fiber.ListenConfig{
