@@ -36,6 +36,8 @@ github.com/tudorhulban/arenalog v0.0.6-0.20260601121910-51e15bf7c47f h1:6mvldaS4
 github.com/tudorhulban/arenalog v0.0.6-0.20260601121910-51e15bf7c47f/go.mod h1:XXIKKDS/UrgULYlv+z8YMUjq3+7jwdqH+xOBBvMOSCs=
 github.com/tudorhulban/bytearena v0.0.18-0.20260528104812-211e4a865a1e h1:Ww4zIxnxRWgZSqTrMbqRj4z7nG+/FNlHaWnUNRjvQv8=
 github.com/tudorhulban/bytearena v0.0.18-0.20260528104812-211e4a865a1e/go.mod h1:8KnBb2PoeuiTsLo+Oav6QHCRP0eNLnMKU83X2h2exNo=
+github.com/tudorhulban/hxhelpers v0.0.0-20260309135203-ce815bbc8158 h1:W87SwjSSddyqG57x8nVnLl3JY9TUp0CNzwQn5B8Pz6k=
+github.com/tudorhulban/hxhelpers v0.0.0-20260309135203-ce815bbc8158/go.mod h1:V227coyOupW/OPDvMnCDOfmKWmz9hjVGASHBYBeaJTI=
 github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6KllzawFIhcdPw=
 github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyCJ6HpOuEn7z0Csc=
 github.com/valyala/fasthttp v1.71.0 h1:tepR7H+Guh9VUqxxcPggYi8R3lGUu2Rsdh+z7/FCY3k=

@@ -17,6 +17,7 @@ import (
 	"github.com/gofiber/fiber/v3/middleware/limiter"
 	"github.com/gofiber/fiber/v3/middleware/logger"
 	"github.com/gofiber/fiber/v3/middleware/static"
+	"github.com/tudorhulban/hxhelpers"
 
 	"github.com/tudorhulban/arenalog"
 	arenafiber "github.com/tudorhulban/arenalog/arena-fiber"
@@ -28,22 +29,22 @@ import (
 var embeddedFS embed.FS
 
 func main() {
-	file, errCreateFile := os.OpenFile(
-		"tara-works_consult.log",
+	fileHTTPServer, errFileHTTP := os.OpenFile(
+		"tara-works_logs.log",
 		os.O_APPEND|os.O_CREATE|os.O_WRONLY,
 		0644,
 	)
-	if errCreateFile != nil {
+	if errFileHTTP != nil {
 		log.Fatal(
 			"Failed to open log file:",
-			errCreateFile,
+			errFileHTTP,
 		)
 	}
-	defer file.Close()
+	defer fileHTTPServer.Close()
 
 	ingestor, errCrIngestor := bytearena.NewIngestor(
 		bytearena.Size100K(),
-		os.Stdout,
+		fileHTTPServer,
 
 		helpers.TernaryWithValueIn(
 			[]int{1},
@@ -160,6 +161,19 @@ func main() {
 		},
 	)
 
+	fileConsult, errCreateFile := os.OpenFile(
+		"tara-works_consult.log",
+		os.O_APPEND|os.O_CREATE|os.O_WRONLY,
+		0644,
+	)
+	if errCreateFile != nil {
+		l.Fatal(
+			"Failed to open log file:",
+			errCreateFile,
+		)
+	}
+	defer fileConsult.Close()
+
 	app.Post(
 		"/submit-consult",
 		submitLimiter,
@@ -169,16 +183,16 @@ func main() {
 			objective := c.FormValue("objective")
 
 			// 2. Format the inbound payload
-			payload := fmt.Sprintf(
+			payload := hxhelpers.Sprintf(
 				"[CONSULT_SUBMIT] Email: %s | Objective: %s\n",
 				email,
 				objective,
 			)
 
 			// 3. Write directly to the io.Writer
-			_, errWrite := io.WriteString(file, payload)
+			_, errWrite := io.WriteString(fileConsult, payload)
 			if errWrite != nil {
-				log.Printf(
+				l.Printf(
 					"Failed to write consultation data to writer: %v",
 					errWrite,
 				)

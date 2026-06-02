@@ -6,6 +6,7 @@ require (
 	github.com/gofiber/fiber/v3 v3.3.0
 	github.com/tudorhulban/arenalog v0.0.6-0.20260601121910-51e15bf7c47f
 	github.com/tudorhulban/bytearena v0.0.18-0.20260528104812-211e4a865a1e
+	github.com/tudorhulban/hxhelpers v0.0.0-20260309135203-ce815bbc8158
 )
 
 require (
