@@ -1,4 +1,4 @@
-package helpers
+package geolocation
 
 import (
 	"encoding/json"
@@ -8,26 +8,24 @@ import (
 )
 
 type ResponseGeoIP struct {
-	City struct {
-		Name string `json:"name"`
-	} `json:"city"`
-
-	Country struct {
-		Name string `json:"name"`
-		Code string `json:"iso_code"`
-	} `json:"country"`
-
 	Location struct {
-		Latitude  float64 `json:"latitude"`
-		Longitude float64 `json:"longitude"`
+		City        string `json:"city"`
+		District    string `json:"district"`
+		CountryCode string `json:"country_code3"`
+		Postcode    string `json:"zipcode"`
+		IsEU        bool   `json:"is_eu"`
 	} `json:"location"`
 
-	Postcode string `json:"postcode"`
+	ASN struct {
+		AsNumber     string `json:"as_number"`
+		Organization string `json:"organization"`
+		Country      string `json:"country"`
+	} `json:"asn"`
 }
 
 func GetLocationByIP(client *http.Client, ipAddress, apiKey string) (*ResponseGeoIP, error) {
 	// 1. Construct the URL safely
-	baseURL, errParse := url.Parse("https://api.geoapify.com/v1/ipinfo")
+	baseURL, errParse := url.Parse("https://api.ipgeolocation.io/v3/ipgeo")
 	if errParse != nil {
 		return nil,
 			fmt.Errorf("failed parsing base URL: %w", errParse)

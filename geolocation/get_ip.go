@@ -1,4 +1,4 @@
-package helpers
+package geolocation
 
 import (
 	"net"
