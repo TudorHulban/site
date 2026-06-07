@@ -1,4 +1,4 @@
-package geolocation
+package analytics
 
 import (
 	"database/sql"

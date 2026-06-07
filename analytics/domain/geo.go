@@ -1,4 +1,4 @@
-package geolocation
+package domain
 
 type Country struct {
 	ID   string `db:"id"`
